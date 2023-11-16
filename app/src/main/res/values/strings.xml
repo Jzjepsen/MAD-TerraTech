@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">TerraTech</string>
+    <string name="title_activity_list_of_terrariums">listOfTerrariums</string>
+    <string name="title_activity_overview_of_terrarium">overviewOfTerrarium</string>
+    <string name="title_activity_manage_terrarium">manageTerrarium</string>
+    <string name="title_activity_google_map">googleMap</string>
+    <string name="title_activity_login">login</string>
+    <string name="title_activity_sign_up">signUp</string>
 </resources>

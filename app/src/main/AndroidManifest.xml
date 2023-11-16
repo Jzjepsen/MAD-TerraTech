@@ -13,6 +13,37 @@
         android:theme="@style/Theme.TerraTech"
         tools:targetApi="31">
         <activity
+            android:name=".signUp"
+            android:exported="false"
+            android:label="@string/title_activity_sign_up"
+            android:theme="@style/Theme.TerraTech" />
+        <activity
+            android:name=".login"
+            android:exported="false"
+            android:label="@string/title_activity_login"
+            android:theme="@style/Theme.TerraTech" />
+        <activity
+            android:name=".googleMap"
+            android:exported="true"
+            android:label="@string/title_activity_google_map"
+            android:theme="@style/Theme.TerraTech" />
+
+        <activity
+            android:name=".manageTerrarium"
+            android:exported="false"
+            android:label="@string/title_activity_manage_terrarium"
+            android:theme="@style/Theme.TerraTech" />
+        <activity
+            android:name=".overviewOfTerrarium"
+            android:exported="false"
+            android:label="@string/title_activity_overview_of_terrarium"
+            android:theme="@style/Theme.TerraTech" />
+        <activity
+            android:name=".listOfTerrariums"
+            android:exported="false"
+            android:label="@string/title_activity_list_of_terrariums"
+            android:theme="@style/Theme.TerraTech" />
+        <activity
             android:name=".MainActivity"
             android:exported="true"
             android:label="@string/app_name"
