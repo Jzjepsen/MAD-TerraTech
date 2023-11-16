@@ -1,12 +1,20 @@
 package com.example.terratech
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.LocationOn
+import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -19,6 +27,7 @@ import com.example.terratech.ui.theme.TerraTechTheme
 import kotlinx.coroutines.flow.MutableStateFlow
 import androidx.compose.ui.unit.dp
 import androidx.compose.runtime.getValue
+import androidx.compose.material3.Icon
 
 
 // ViewModel to handle the logic and data for the terrarium
@@ -70,7 +79,7 @@ fun DisplayData(degrees: String, humidity: String) {
 
 // Main screen Composable function
 @Composable
-fun TerrariumDetailsScreen(viewModel: TerrariumViewModel) {
+fun TerrariumDetailsScreen(viewModel: TerrariumViewModel, onManageTerrariumClicked : () -> Unit, onGoogleMapClicked : () -> Unit ) {
     val terrariumData by viewModel.terrariumData.collectAsState()
 
     Column {
@@ -79,11 +88,27 @@ fun TerrariumDetailsScreen(viewModel: TerrariumViewModel) {
             degrees = terrariumData.temperature.toString(),
             humidity = terrariumData.humidity.toString()
         )
+        Button(onClick = onManageTerrariumClicked) {
+            Icon(
+                imageVector = Icons.Filled.Settings, // Replace with your desired icon
+                contentDescription = "Icon Description"
+            )
+            Spacer(Modifier.size(ButtonDefaults.IconSpacing)) // Adds spacing between icon and text
+            Text("Manage Terrarium")
+        }
+        Button(onClick = onGoogleMapClicked) {
+            Icon(
+                imageVector = Icons.Filled.LocationOn, // Replace with your desired icon
+                contentDescription = "Icon Description"
+            )
+            Spacer(Modifier.size(ButtonDefaults.IconSpacing)) // Adds spacing between icon and text
+            Text("Location")
+        }
         // Additional content can go here...
     }
 }
 
-// Entry point of the app
+
 class overviewOfTerrarium : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -94,27 +119,23 @@ class overviewOfTerrarium : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
                     val viewModel: TerrariumViewModel = viewModel()
-                    TerrariumDetailsScreen(viewModel)
+                    TerrariumDetailsScreen(
+                        viewModel,
+                        onManageTerrariumClicked = { navigateToManageTerrarium() },
+                        onGoogleMapClicked = { navigateToGoogleMap() } // Add this
+                    )
                 }
             }
         }
     }
-}
 
-// Preview of the TerrariumDetailsScreen
-@Preview(showBackground = true)
-@Composable
-fun TerrariumDetailsScreenPreview() {
-    TerraTechTheme {
-        TerrariumDetailsScreen(TerrariumViewModel())
+    private fun navigateToManageTerrarium() {
+        val intent = Intent(this, manageTerrarium::class.java)
+        startActivity(intent)
     }
-}
 
-// Preview of the DisplayData
-@Preview(showBackground = true)
-@Composable
-fun DisplayDataPreview() {
-    TerraTechTheme {
-        DisplayData(degrees = "24", humidity = "60")
+    private fun navigateToGoogleMap() {
+        val intent = Intent(this, googleMap::class.java)
+        startActivity(intent)
     }
 }
