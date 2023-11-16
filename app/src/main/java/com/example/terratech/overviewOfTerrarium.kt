@@ -28,6 +28,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import androidx.compose.ui.unit.dp
 import androidx.compose.runtime.getValue
 import androidx.compose.material3.Icon
+import androidx.compose.ui.text.style.TextAlign
 
 
 // ViewModel to handle the logic and data for the terrarium
@@ -51,13 +52,15 @@ data class TerrariumData(val temperature: Double, val humidity: Int)
 fun PageHeader(title: String) {
     Surface(
         modifier = Modifier
-            .fillMaxWidth()
+            .fillMaxWidth() // This ensures the Surface takes the full width
             .padding(16.dp),
         color = MaterialTheme.colorScheme.primaryContainer
     ) {
         Text(
             text = title,
-            style = MaterialTheme.typography.headlineMedium
+            style = MaterialTheme.typography.headlineMedium,
+            modifier = Modifier.fillMaxWidth(), // Ensures Text takes full width of the Surface
+            textAlign = TextAlign.Center // Centers the text
         )
     }
 }
