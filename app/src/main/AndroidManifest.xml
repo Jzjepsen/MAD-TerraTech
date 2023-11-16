@@ -24,9 +24,10 @@
             android:theme="@style/Theme.TerraTech" />
         <activity
             android:name=".googleMap"
-            android:exported="false"
+            android:exported="true"
             android:label="@string/title_activity_google_map"
             android:theme="@style/Theme.TerraTech" />
+
         <activity
             android:name=".manageTerrarium"
             android:exported="false"

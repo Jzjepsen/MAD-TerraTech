@@ -22,7 +22,7 @@ class googleMap : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    Greeting5("Android")
+                    Greeting5("Android GOOGLE")
                 }
             }
         }
