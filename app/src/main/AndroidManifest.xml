@@ -19,9 +19,15 @@
             android:theme="@style/Theme.TerraTech" />
         <activity
             android:name=".login"
-            android:exported="false"
+            android:exported="true"
             android:label="@string/title_activity_login"
-            android:theme="@style/Theme.TerraTech" />
+            android:theme="@style/Theme.TerraTech">
+        <intent-filter>
+            <action android:name="android.intent.action.MAIN" />
+
+            <category android:name="android.intent.category.LAUNCHER" />
+        </intent-filter>
+    </activity>
         <activity
             android:name=".googleMap"
             android:exported="false"
@@ -46,13 +52,8 @@
             android:name=".MainActivity"
             android:exported="true"
             android:label="@string/app_name"
-            android:theme="@style/Theme.TerraTech">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+            android:theme="@style/Theme.TerraTech"/>
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
     </application>
 
 </manifest>
