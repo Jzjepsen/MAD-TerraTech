@@ -4,14 +4,22 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.LocationOn
+import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -28,7 +36,13 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import androidx.compose.ui.unit.dp
 import androidx.compose.runtime.getValue
 import androidx.compose.material3.Icon
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.sp
 
 
 // ViewModel to handle the logic and data for the terrarium
@@ -38,7 +52,9 @@ class TerrariumViewModel : ViewModel() {
     init {
         fetchTerrariumData()
     }
-
+    fun refreshData() {
+        fetchTerrariumData() // Your existing function to fetch data
+    }
     private fun fetchTerrariumData() {
         // Fetch data from your API and update the terrariumData
     }
@@ -65,20 +81,34 @@ fun PageHeader(title: String) {
     }
 }
 
-// Composable function to display the terrarium data
 @Composable
 fun DisplayData(degrees: String, humidity: String) {
-    Column(modifier = Modifier.padding(16.dp)) {
-        Text(
-            text = "Degrees: $degrees°C",
-            style = MaterialTheme.typography.bodyLarge
-        )
-        Text(
-            text = "Humidity: $humidity%",
-            style = MaterialTheme.typography.bodyLarge
-        )
+    Box(
+        modifier = Modifier
+            .padding(8.dp)
+            .background(Color.LightGray, shape = RoundedCornerShape(8.dp)) // Customize the box appearance
+            .padding(16.dp) // Padding inside the box
+    ) {
+        Column {
+            Text(
+                text = "Degrees: $degrees°C",
+                style = TextStyle(
+                    fontSize = 18.sp, // Larger font size
+                    fontWeight = FontWeight.Bold // Optional: make it bold
+                )
+            )
+            Text(
+                text = "Humidity: $humidity%",
+                style = TextStyle(
+                    fontSize = 18.sp, // Larger font size
+                    fontWeight = FontWeight.Bold // Optional: make it bold
+                )
+            )
+        }
     }
 }
+
+
 
 // Main screen Composable function
 @Composable
@@ -87,27 +117,60 @@ fun TerrariumDetailsScreen(viewModel: TerrariumViewModel, onManageTerrariumClick
 
     Column {
         PageHeader(title = "Terrarium Overview")
-        DisplayData(
-            degrees = terrariumData.temperature.toString(),
-            humidity = terrariumData.humidity.toString()
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Spacer(Modifier.width(15.dp))
+
+            DisplayData(
+                degrees = terrariumData.temperature.toString(),
+                humidity = terrariumData.humidity.toString()
+            )
+
+            Spacer(Modifier.width(40.dp))
+
+
+            Button(onClick = { viewModel.refreshData() }) {
+                Icon(
+                    imageVector = Icons.Filled.Refresh,
+                    contentDescription = "Refresh"
+                )
+                Spacer(Modifier.size(ButtonDefaults.IconSpacing))
+                Text("Refresh")
+            }
+        }
+        Spacer(Modifier.height(16.dp))
+
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Spacer(Modifier.width(15.dp))
+
+            Button(onClick = onManageTerrariumClicked) {
+                Icon(
+                    imageVector = Icons.Filled.Settings,
+                    contentDescription = "Icon Description"
+                )
+                Spacer(Modifier.size(ButtonDefaults.IconSpacing))
+                Text("Manage Terrarium")
+            }
+            Spacer(Modifier.width(40.dp)) // Add spacing here
+
+            Button(onClick = onGoogleMapClicked) {
+                Icon(
+                    imageVector = Icons.Filled.LocationOn,
+                    contentDescription = "Icon Description"
+                )
+                Spacer(Modifier.size(ButtonDefaults.IconSpacing))
+                Text("Location")
+            }
+        }
+        Spacer(Modifier.width(40.dp)) // Add spacing here
+
+        Image(
+            painter = painterResource(id = R.drawable.gecko),
+            contentDescription = "Terrarium Image",
+            modifier = Modifier
+                .height(330.dp) // Specify the height of the image
+                .fillMaxWidth() // Make the image fill the maximum width
+                .padding(16.dp) // Add some padding
         )
-        Button(onClick = onManageTerrariumClicked) {
-            Icon(
-                imageVector = Icons.Filled.Settings, // Replace with your desired icon
-                contentDescription = "Icon Description"
-            )
-            Spacer(Modifier.size(ButtonDefaults.IconSpacing)) // Adds spacing between icon and text
-            Text("Manage Terrarium")
-        }
-        Button(onClick = onGoogleMapClicked) {
-            Icon(
-                imageVector = Icons.Filled.LocationOn, // Replace with your desired icon
-                contentDescription = "Icon Description"
-            )
-            Spacer(Modifier.size(ButtonDefaults.IconSpacing)) // Adds spacing between icon and text
-            Text("Location")
-        }
-        // Additional content can go here...
     }
 }
 
@@ -125,7 +188,7 @@ class overviewOfTerrarium : ComponentActivity() {
                     TerrariumDetailsScreen(
                         viewModel,
                         onManageTerrariumClicked = { navigateToManageTerrarium() },
-                        onGoogleMapClicked = { navigateToGoogleMap() } // Add this
+                        onGoogleMapClicked = { navigateToGoogleMap() }
                     )
                 }
             }
