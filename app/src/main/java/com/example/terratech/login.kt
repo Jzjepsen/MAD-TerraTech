@@ -2,6 +2,7 @@ package com.example.terratech
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.BorderStroke
@@ -18,6 +19,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
+import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.Button
@@ -94,9 +96,8 @@ fun SignIn(modifier: Modifier = Modifier, service: Firestore){
     val username =  remember { mutableStateOf("") }
     val password = remember { mutableStateOf("") }
     val scope = rememberCoroutineScope()
-    // Use tab to change focus
-    val focusRequester1 = remember { FocusRequester() }
-    val focusRequester2 = remember { FocusRequester() }
+    //Error message
+    val loginErrorMessage = remember { mutableStateOf<String?>(null) }
     Column(
         modifier = modifier
             .fillMaxWidth()
@@ -119,31 +120,26 @@ fun SignIn(modifier: Modifier = Modifier, service: Firestore){
 
         OutlinedTextField(
             modifier = modifier
-                .padding(16.dp, 4.dp)
-                .focusRequester(focusRequester1)
-                .onKeyEvent { keyEvent ->
-                    if (keyEvent.key == Key.Tab && keyEvent.type == KeyEventType.KeyUp) {
-                        focusRequester2.requestFocus()
-                        true
-                    } else false},
+                .padding(16.dp, 4.dp),
             value = username.value,
-            onValueChange = { newText -> username.value = newText},
-            label = { Text("Username") }
+            onValueChange = {
+                    newText -> username.value = newText
+                    if (loginErrorMessage.value != null) {
+                        loginErrorMessage.value = null // Reset error message when user starts typing
+                    } },
+            label = { Text("Username") },
+            leadingIcon = { Icon(imageVector = Icons.Default.Email, contentDescription = "Email")}
+
         )
 
             OutlinedTextField(
                 modifier = modifier
-                    .padding(16.dp, 4.dp)
-                    .focusRequester(focusRequester2)
-                .onKeyEvent { keyEvent ->
-                if (keyEvent.key == Key.Tab && keyEvent.type == KeyEventType.KeyUp) {
-                    focusRequester1.requestFocus()
-                    true
-                } else false},
+                    .padding(16.dp, 4.dp),
             value = password.value,
             onValueChange = { newText -> password.value = newText },
             label = { Text("Password") } ,
-            visualTransformation = PasswordVisualTransformation()
+            visualTransformation = PasswordVisualTransformation(),
+                leadingIcon = { Icon(imageVector = Icons.Default.Lock, contentDescription = "password") }
         )
 
         Spacer(modifier = Modifier
@@ -154,13 +150,15 @@ fun SignIn(modifier: Modifier = Modifier, service: Firestore){
         Button(
             onClick = {
                 scope.launch {
-                    val user = service.login(username.value, password.value)
-                    if (user != null){
-                    val intent = Intent(context, overviewOfTerrarium::class.java)
-                    context.startActivity(intent)
-            } else {
-                // Show wrong login
-            }}},
+                        if (isValidEmail(username.value)) {
+                            val user = service.login(username.value, password.value)
+                            val intent = Intent(context, overviewOfTerrarium::class.java)
+                            context.startActivity(intent)
+                        }
+                        else {
+                            loginErrorMessage.value = "Invalid email format"
+                        }
+                }},
             modifier = modifier
                 .padding(16.dp, 0.dp)
         ) {
@@ -171,17 +169,30 @@ fun SignIn(modifier: Modifier = Modifier, service: Firestore){
             )
         }
 
-        TextButton(onClick = { }
+        if (loginErrorMessage.value != null) {
+            Text(loginErrorMessage.value!!, color = Color.Red)
+        }
+
+        TextButton(onClick = {
+            val intent = Intent(context, signUp::class.java)
+            context.startActivity(intent)
+        }
         ) {
             Text(text = "Sign Up", fontSize = 16.sp)
         }
     }
 }
 
+fun isValidEmail(email: String): Boolean {
+    return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()
+}
+
 @Preview(showBackground = true)
 @Composable
 fun GreetingPreview6() {
+    val auth = Firebase.auth
+    val db = FirebaseFirestore.getInstance()
     TerraTechTheme {
-        //SignIn({ })
+        SignIn(modifier = Modifier, Firestore(db, auth))
     }
 }
