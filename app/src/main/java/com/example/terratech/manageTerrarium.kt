@@ -1,6 +1,7 @@
 package com.example.terratech
 
 import android.graphics.Paint.Align
+import android.icu.text.CaseMap.Title
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -35,6 +36,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -61,10 +63,19 @@ class manageTerrarium : ComponentActivity() {
 fun Layout(number: String, modifier: Modifier = Modifier) {
 
     TerraTechTheme {
+
+            Box (
+                contentAlignment = Alignment.TopCenter
+            ) {
+                TitleText("1")
+            }
+
             Box(
                 contentAlignment = Alignment.Center
+
             ) {
                 Column {
+
 
                     SwitchTemplate("Heater")
                     SwitchTemplate("Flow Nozzle")
@@ -79,6 +90,18 @@ fun Layout(number: String, modifier: Modifier = Modifier) {
 
 
 
+
+}
+
+@Composable
+fun TitleText(TerrariumNumber: String){
+    Text(
+        modifier = Modifier.fillMaxWidth().padding(vertical = 20.dp),
+        text = "Manage Terrarium $TerrariumNumber",
+        fontSize = 20.sp,
+        fontWeight = FontWeight.Black,
+        textAlign = TextAlign.Center
+    )
 
 }
 
