@@ -1,9 +1,17 @@
 package com.example.terratech
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Home
+import androidx.compose.material3.Button
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.foundation.layout.Row
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -17,30 +25,20 @@ class manageTerrarium : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             TerraTechTheme {
-                // A surface container using the 'background' color from the theme
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
-                ) {
-                    Greeting4("Android")
+                val intentHome = Intent(this@manageTerrarium, MainActivity::class.java)
+                Row() {
+                    IconButton(onClick = {
+                        startActivity(intentHome)
+                    }) {
+                        Icon(Icons.Filled.Home, "home")
+                    }
+                    Button(onClick = {
+                        finish()
+                    }) {
+                        Text("Back", style = MaterialTheme.typography.bodyLarge)
+                    }
                 }
             }
         }
-    }
-}
-
-@Composable
-fun Greeting4(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview4() {
-    TerraTechTheme {
-        Greeting4("Android")
     }
 }
