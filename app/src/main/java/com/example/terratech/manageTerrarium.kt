@@ -12,7 +12,6 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.foundation.layout.Row
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -30,15 +29,13 @@ class manageTerrarium : ComponentActivity() {
                 Row() {
                     IconButton(onClick = {
                         startActivity(intentHome)
-                    })
-                    {
+                    }) {
                         Icon(Icons.Filled.Home, "home")
                     }
                     Button(onClick = {
                         finish()
                     }) {
-                        Icon(Icons.Filled.ArrowBack, "back")
-                        Text("  Back", style = MaterialTheme.typography.bodyLarge)
+                        Text("Back", style = MaterialTheme.typography.bodyLarge)
                     }
                 }
             }

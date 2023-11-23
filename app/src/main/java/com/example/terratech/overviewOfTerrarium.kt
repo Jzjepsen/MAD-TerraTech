@@ -25,7 +25,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.Settings
@@ -43,6 +43,7 @@ import com.example.terratech.ui.theme.TerraTechTheme
 import kotlinx.coroutines.flow.MutableStateFlow
 import androidx.compose.ui.unit.dp
 import androidx.compose.runtime.getValue
+import androidx.compose.material3.Icon
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
@@ -119,7 +120,7 @@ fun DisplayData(degrees: String, humidity: String) {
 
 // Main screen Composable function
 @Composable
-fun TerrariumDetailsScreen(viewModel: TerrariumViewModel, onManageTerrariumClicked : () -> Unit, onGoogleMapClicked : () -> Unit) {
+fun TerrariumDetailsScreen(viewModel: TerrariumViewModel, onManageTerrariumClicked : () -> Unit, onGoogleMapClicked : () -> Unit ) {
     val terrariumData by viewModel.terrariumData.collectAsState()
 
     Column {
@@ -133,6 +134,7 @@ fun TerrariumDetailsScreen(viewModel: TerrariumViewModel, onManageTerrariumClick
             )
 
             Spacer(Modifier.width(40.dp))
+
 
             Button(onClick = { viewModel.refreshData() }) {
                 Icon(
@@ -187,33 +189,42 @@ class overviewOfTerrarium : ComponentActivity() {
         setContent {
             TerraTechTheme {
                 val intentHome = Intent(this@overviewOfTerrarium, MainActivity::class.java)
+                val intentGoogle = Intent(this@overviewOfTerrarium, googleMap::class.java)
+                val intentManage = Intent(this@overviewOfTerrarium, manageTerrarium::class.java)
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
                     Column() {
-                        Spacer(Modifier.width(15.dp))
                         Row() {
                             IconButton(onClick = {
                                 startActivity(intentHome)
-                            })
-                            {
+                            }) {
                                 Icon(Icons.Filled.Home, "home")
                             }
                             Button(onClick = {
                                 finish()
                             }) {
-                                Icon(Icons.Filled.ArrowBack, "back")
-                                Text("  Back", style = MaterialTheme.typography.bodyLarge)
+                                Text("Back", style = MaterialTheme.typography.bodyLarge)
                             }
                         }
-                        val viewModel: TerrariumViewModel = viewModel()
-                        TerrariumDetailsScreen(
-                            viewModel,
-                            onManageTerrariumClicked = { navigateToManageTerrarium() },
-                            onGoogleMapClicked = { navigateToGoogleMap() },
-                        )
+                        Button(onClick = {
+                            startActivity(intentGoogle)
+                        }) {
+                            Text("View this Terrarium on Google Map", style = MaterialTheme.typography.bodyLarge)
+                        }
+                        Button(onClick = {
+                            startActivity(intentManage)
+                        }) {
+                            Text("Manage this Terrarium", style = MaterialTheme.typography.bodyLarge)
+                        }
                     }
+                    val viewModel: TerrariumViewModel = viewModel()
+                    TerrariumDetailsScreen(
+                        viewModel,
+                        onManageTerrariumClicked = { navigateToManageTerrarium() },
+                        onGoogleMapClicked = { navigateToGoogleMap() }
+                    )
                 }
             }
         }
@@ -228,5 +239,4 @@ class overviewOfTerrarium : ComponentActivity() {
         val intent = Intent(this, googleMap::class.java)
         startActivity(intent)
     }
-
 }
