@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
@@ -32,13 +33,15 @@ class listOfTerrariums : ComponentActivity() {
                     Row() {
                         IconButton(onClick = {
                             startActivity(intentHome)
-                        }) {
+                        })
+                        {
                             Icon(Icons.Filled.Home, "home")
                         }
                         Button(onClick = {
                             finish()
                         }) {
-                            Text("Back", style = MaterialTheme.typography.bodyLarge)
+                            Icon(Icons.Filled.ArrowBack, "back")
+                            Text("  Back", style = MaterialTheme.typography.bodyLarge)
                         }
                     }
                     Button(onClick = {
