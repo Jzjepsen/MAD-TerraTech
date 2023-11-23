@@ -41,7 +41,6 @@
             android:exported="true"
             android:label="@string/title_activity_overview_of_terrarium"
             android:theme="@style/Theme.TerraTech">
-
         </activity>
         <activity
             android:name=".listOfTerrariums"
@@ -55,7 +54,6 @@
             android:theme="@style/Theme.TerraTech">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

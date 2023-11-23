@@ -1,17 +1,13 @@
 package com.example.terratech
 
-import android.graphics.Paint.Align
-import android.icu.text.CaseMap.Title
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -20,12 +16,18 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.ExperimentalMaterial3Api
+import android.content.Intent
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Home
+import androidx.compose.material3.Button
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -47,12 +49,34 @@ class manageTerrarium : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             TerraTechTheme {
-                // A surface container using the 'background' color from the theme
+
+
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    Layout("1")
+                    Column {
+
+                    val intentHome = Intent(this@manageTerrarium, MainActivity::class.java)
+                    Row() {
+                        IconButton(onClick = {
+                            startActivity(intentHome)
+                        }) {
+                            Icon(Icons.Filled.Home, "home")
+                        }
+                        Button(onClick = {
+                            finish()
+                        }) {
+                            Icon(Icons.Filled.ArrowBack, "back")
+                            Text("  Back", style = MaterialTheme.typography.bodyLarge)
+                        }
+                    }
+
+
+
+                    ManageTerrariumScreen("1")
+
+                }
                 }
             }
         }
@@ -60,7 +84,7 @@ class manageTerrarium : ComponentActivity() {
 }
 
 @Composable
-fun Layout(number: String, modifier: Modifier = Modifier) {
+fun ManageTerrariumScreen(number: String, modifier: Modifier = Modifier) {
 
     TerraTechTheme {
 
@@ -98,8 +122,7 @@ fun TitleText(TerrariumNumber: String){
     Text(
         modifier = Modifier.fillMaxWidth().padding(vertical = 20.dp),
         text = "Manage Terrarium $TerrariumNumber",
-        fontSize = 20.sp,
-        fontWeight = FontWeight.Black,
+        style = MaterialTheme.typography.headlineMedium,
         textAlign = TextAlign.Center
     )
 
@@ -214,6 +237,6 @@ fun StylisedTextField(placeholderText: String) {
 @Composable
 fun GreetingPreview4() {
     TerraTechTheme {
-        Layout("Android")
+        ManageTerrariumScreen("Android")
     }
 }
