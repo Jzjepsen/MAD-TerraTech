@@ -172,6 +172,13 @@ fun SignUp(modifier: Modifier = Modifier, service: Firestore){
             )
         }
 
+        TextButton(onClick = {
+            // Go back
+        }
+        ) {
+            Text(text = "Go back", fontSize = 16.sp)
+        }
+
         if (loginErrorMessage.value != null) {
             Text(loginErrorMessage.value!!, color = Color.Red)
         }
