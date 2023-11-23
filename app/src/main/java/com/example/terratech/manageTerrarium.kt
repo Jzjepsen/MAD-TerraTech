@@ -35,7 +35,8 @@ class manageTerrarium : ComponentActivity() {
                     Button(onClick = {
                         finish()
                     }) {
-                        Text("Back", style = MaterialTheme.typography.bodyLarge)
+                        Icon(Icons.Filled.ArrowBack, "back")
+                        Text("  Back", style = MaterialTheme.typography.bodyLarge)
                     }
                 }
             }

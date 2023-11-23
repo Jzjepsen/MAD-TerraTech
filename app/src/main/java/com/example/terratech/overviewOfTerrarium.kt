@@ -7,7 +7,6 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
@@ -26,6 +25,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.Settings
@@ -189,8 +189,6 @@ class overviewOfTerrarium : ComponentActivity() {
         setContent {
             TerraTechTheme {
                 val intentHome = Intent(this@overviewOfTerrarium, MainActivity::class.java)
-                val intentGoogle = Intent(this@overviewOfTerrarium, googleMap::class.java)
-                val intentManage = Intent(this@overviewOfTerrarium, manageTerrarium::class.java)
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
@@ -205,26 +203,17 @@ class overviewOfTerrarium : ComponentActivity() {
                             Button(onClick = {
                                 finish()
                             }) {
-                                Text("Back", style = MaterialTheme.typography.bodyLarge)
+                                Icon(Icons.Filled.ArrowBack, "back")
+                                Text("  Back", style = MaterialTheme.typography.bodyLarge)
                             }
                         }
-                        Button(onClick = {
-                            startActivity(intentGoogle)
-                        }) {
-                            Text("View this Terrarium on Google Map", style = MaterialTheme.typography.bodyLarge)
-                        }
-                        Button(onClick = {
-                            startActivity(intentManage)
-                        }) {
-                            Text("Manage this Terrarium", style = MaterialTheme.typography.bodyLarge)
-                        }
+                        val viewModel: TerrariumViewModel = viewModel()
+                        TerrariumDetailsScreen(
+                            viewModel,
+                            onManageTerrariumClicked = { navigateToManageTerrarium() },
+                            onGoogleMapClicked = { navigateToGoogleMap() }
+                        )
                     }
-                    val viewModel: TerrariumViewModel = viewModel()
-                    TerrariumDetailsScreen(
-                        viewModel,
-                        onManageTerrariumClicked = { navigateToManageTerrarium() },
-                        onGoogleMapClicked = { navigateToGoogleMap() }
-                    )
                 }
             }
         }
