@@ -1,9 +1,18 @@
 package com.example.terratech
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Home
+import androidx.compose.material3.Button
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -13,34 +22,34 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.example.terratech.ui.theme.TerraTechTheme
 
 class listOfTerrariums : ComponentActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             TerraTechTheme {
-                // A surface container using the 'background' color from the theme
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
-                ) {
-                    Greeting2("Android")
+                val intent = Intent(this@listOfTerrariums, overviewOfTerrarium::class.java)
+                val intentHome = Intent(this@listOfTerrariums, MainActivity::class.java)
+                Column() {
+                    Row() {
+                        IconButton(onClick = {
+                            startActivity(intentHome)
+                        }) {
+                            Icon(Icons.Filled.Home, "home")
+                        }
+                        Button(onClick = {
+                            finish()
+                        }) {
+                            Icon(Icons.Filled.ArrowBack, "back")
+                            Text("  Back", style = MaterialTheme.typography.bodyLarge)
+                        }
+                    }
+                    Button(onClick = {
+                        startActivity(intent)
+                    }) {
+                        Text("View this Terrarium", style = MaterialTheme.typography.bodyLarge)
+                    }
                 }
             }
         }
-    }
-}
-
-@Composable
-fun Greeting2(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview2() {
-    TerraTechTheme {
-        Greeting2("Android")
     }
 }
