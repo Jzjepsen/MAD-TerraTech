@@ -19,6 +19,32 @@ import com.google.android.gms.maps.MapView
 import com.google.android.gms.maps.MapsInitializer
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
+import androidx.compose.foundation.layout.Box
+import androidx.compose.ui.Alignment
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.ui.unit.dp
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.offset
+import androidx.compose.ui.unit.dp
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Surface
+import androidx.compose.material.Text
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.compose.material.TopAppBar
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.dp
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material.Text
+import androidx.compose.ui.unit.sp
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Column
+
+
 
 class googleMap : AppCompatActivity() {
     private lateinit var fusedLocationClient: FusedLocationProviderClient
@@ -32,7 +58,7 @@ class googleMap : AppCompatActivity() {
     }
 
     @Composable
-    fun MapViewContainer(modifier: Modifier = Modifier) {
+    fun MapViewContainer() {
         val mapView = remember {
             MapView(this).apply {
                 onCreate(Bundle())
@@ -55,8 +81,36 @@ class googleMap : AppCompatActivity() {
             }
         }
 
-        AndroidView({ mapView }, modifier = modifier)
+        Column {
+            // Adding title text at the top of the screen
+            TopAppBar(
+                title = { Text("Google Maps Overview", color = Color.White, fontSize = 18.sp) },
+                backgroundColor = Color.DarkGray,
+                modifier = Modifier.padding(top = 16.dp)
+            )
+
+            Box(
+                modifier = Modifier.fillMaxWidth().padding(16.dp),
+                contentAlignment = Alignment.Center,
+                content = {
+                    Surface(color = Color.DarkGray, modifier = Modifier.padding(8.dp)) {
+                        Text(
+                            text = "Terrarium Coordinates:\nLat: 56°08'40.8\"N\nLong: 10°11'06.5\"E",
+                            color = Color.White,
+                            fontSize = 18.sp,
+                            modifier = Modifier.padding(8.dp)
+                        )
+                    }
+                }
+            )
+
+            Box(modifier = Modifier.fillMaxSize().offset(y = (-100).dp), contentAlignment = Alignment.Center) {
+                AndroidView({ mapView }, modifier = Modifier.fillMaxWidth(0.7f).fillMaxHeight(0.4f))
+            }
+        }
     }
+
+
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)

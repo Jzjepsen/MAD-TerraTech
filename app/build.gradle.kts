@@ -58,6 +58,7 @@ dependencies {
     implementation("androidx.compose.ui:ui")
     implementation("androidx.compose.ui:ui-graphics")
     implementation ("androidx.compose.ui:ui:1.0.2")
+    implementation ("androidx.compose.material:material:1.0.4")
     implementation("androidx.compose.ui:ui-tooling-preview")
     implementation("androidx.compose.material3:material3")
     implementation ("com.google.android.gms:play-services-maps:17.0.1")
