@@ -147,7 +147,7 @@ fun SignUp(modifier: Modifier = Modifier, service: Firestore){
                         if (password.value.length > 5) {
                         if (password.value == confirmPassword.value ) {
                             val user = service.signup(username.value, password.value)
-                            val intent = Intent(context, overviewOfTerrarium::class.java)
+                            val intent = Intent(context, listOfTerrariums::class.java)
                             context.startActivity(intent)
                         }
                         else {

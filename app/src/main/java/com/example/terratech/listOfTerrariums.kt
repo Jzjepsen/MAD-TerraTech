@@ -21,14 +21,19 @@ import androidx.compose.ui.Modifier
 import com.example.terratech.ui.theme.TerraTechTheme
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavController
+//import androidx.navigation.NavController
 
 
 
@@ -39,18 +44,43 @@ class listOfTerrariums : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             TerraTechTheme {
+                val intent = Intent(this@listOfTerrariums, overviewOfTerrarium::class.java)
+
                 // A surface container using the 'background' color from the theme
                 Surface(
-                    modifier = Modifier.fillMaxSize(),
+                    modifier = Modifier
+                        .fillMaxWidth() // This ensures the Surface takes the full width
+                        .padding(16.dp),
                     color = MaterialTheme.colorScheme.background
                 ) {
+                    Column() {
+                        Spacer(Modifier.width(40.dp))
+
+                        Text(
+                            text = "TerraTech",
+                            style = MaterialTheme.typography.displayLarge
+                        )
+
+                        Spacer(Modifier.width(15.dp))
+
+                        Text("Below is your list of Terrariums:", style = MaterialTheme.typography.headlineSmall)
+
+                        Spacer(Modifier.width(40.dp))
+
+                        Button(onClick = {
+                            startActivity(intent)
+                        }) {
+                            Text("View this Terrarium", style = MaterialTheme.typography.bodyLarge)
+                        }
+
+                    }
                 }
             }
         }
     }
 }
 
-
+/*
 @Composable
 fun MyApp(content: @Composable () -> Unit) {
     Surface(color = MaterialTheme.colorScheme.background) {
@@ -101,3 +131,4 @@ fun TerrariumList(navController: NavController) {
     }
 }
 
+*/

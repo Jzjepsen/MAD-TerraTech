@@ -152,7 +152,7 @@ fun SignIn(modifier: Modifier = Modifier, service: Firestore){
                 scope.launch {
                         if (isValidEmail(username.value)) {
                             val user = service.login(username.value, password.value)
-                            val intent = Intent(context, overviewOfTerrarium::class.java)
+                            val intent = Intent(context, listOfTerrariums::class.java)
                             context.startActivity(intent)
                         }
                         else {
