@@ -1,11 +1,20 @@
 package com.example.terratech
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -17,30 +26,21 @@ class googleMap : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             TerraTechTheme {
-                // A surface container using the 'background' color from the theme
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
-                ) {
-                    Greeting5("Android GOOGLE")
+                val intentHome = Intent(this@googleMap, listOfTerrariums::class.java)
+                Row() {
+                    IconButton(onClick = {
+                        startActivity(intentHome)
+                    }) {
+                        Icon(Icons.Filled.Home, "home")
+                    }
+                    Button(onClick = {
+                        finish()
+                    }) {
+                        Icon(Icons.Filled.ArrowBack, "back")
+                        Text("  Back", style = MaterialTheme.typography.bodyLarge)
+                    }
                 }
             }
         }
-    }
-}
-
-@Composable
-fun Greeting5(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview5() {
-    TerraTechTheme {
-        Greeting5("Android")
     }
 }
