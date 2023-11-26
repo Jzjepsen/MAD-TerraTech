@@ -18,8 +18,20 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import com.example.terratech.ui.theme.TerraTechTheme
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+
+
+
 
 class listOfTerrariums : ComponentActivity() {
 
@@ -27,15 +39,65 @@ class listOfTerrariums : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             TerraTechTheme {
-                val intent = Intent(this@listOfTerrariums, overviewOfTerrarium::class.java)
-                Column() {
-                    Button(onClick = {
-                        startActivity(intent)
-                    }) {
-                        Text("View this Terrarium", style = MaterialTheme.typography.bodyLarge)
-                    }
+                // A surface container using the 'background' color from the theme
+                Surface(
+                    modifier = Modifier.fillMaxSize(),
+                    color = MaterialTheme.colorScheme.background
+                ) {
                 }
             }
         }
     }
 }
+
+
+@Composable
+fun MyApp(content: @Composable () -> Unit) {
+    Surface(color = MaterialTheme.colorScheme.background) {
+        content()
+    }
+}
+
+
+@Composable
+fun TerrariumList(navController: NavController) {
+    Column {
+        Button(
+            onClick = { navController.navigate("terrarium1") },
+            modifier = Modifier.height(50.dp),
+            shape = RoundedCornerShape(12.dp),
+            colors = ButtonDefaults.outlinedButtonColors(contentColor = Color.Blue),
+            contentPadding = PaddingValues(horizontal = 30.dp, vertical = 10.dp)
+        ) {
+            Text("Terrarium 1", fontSize = 18.sp, color = Color.Blue)
+        }
+        Button(
+            onClick = { navController.navigate("terrarium1") },
+            modifier = Modifier.height(50.dp),
+            shape = RoundedCornerShape(12.dp),
+            colors = ButtonDefaults.outlinedButtonColors(contentColor = Color.Blue),
+            contentPadding = PaddingValues(horizontal = 30.dp, vertical = 10.dp)
+        ) {
+            Text("Terrarium 2", fontSize = 18.sp, color = Color.Blue)
+        }
+        Button(
+            onClick = { navController.navigate("terrarium1") },
+            modifier = Modifier.height(50.dp),
+            shape = RoundedCornerShape(12.dp),
+            colors = ButtonDefaults.outlinedButtonColors(contentColor = Color.Blue),
+            contentPadding = PaddingValues(horizontal = 30.dp, vertical = 10.dp)
+        ) {
+            Text("Terrarium 3", fontSize = 18.sp, color = Color.Blue)
+        }
+        Button(
+            onClick = { navController.navigate("terrarium1") },
+            modifier = Modifier.height(50.dp),
+            shape = RoundedCornerShape(12.dp),
+            colors = ButtonDefaults.outlinedButtonColors(contentColor = Color.Blue),
+            contentPadding = PaddingValues(horizontal = 30.dp, vertical = 10.dp)
+        ) {
+            Text("Terrarium 4", fontSize = 18.sp, color = Color.Blue)
+        }
+    }
+}
+
