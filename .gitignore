@@ -1,1 +1,14 @@
-.gradle
+*.lock
+.DS_Store
+*.bin
+*.properties
+*.properties
+*.properties
+local.properties
+*.lock
+*.lock
+*.bin
+*.lock
+*.lock
+*.bin
+*.lock

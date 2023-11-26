@@ -26,7 +26,7 @@ class googleMap : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             TerraTechTheme {
-                val intentHome = Intent(this@googleMap, MainActivity::class.java)
+                val intentHome = Intent(this@googleMap, listOfTerrariums::class.java)
                 Row() {
                     IconButton(onClick = {
                         startActivity(intentHome)

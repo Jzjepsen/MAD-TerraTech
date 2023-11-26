@@ -57,26 +57,26 @@ class manageTerrarium : ComponentActivity() {
                 ) {
                     Column {
 
-                    val intentHome = Intent(this@manageTerrarium, MainActivity::class.java)
-                    Row() {
-                        IconButton(onClick = {
-                            startActivity(intentHome)
-                        }) {
-                            Icon(Icons.Filled.Home, "home")
-                        }
-                        Button(onClick = {
-                            finish()
-                        }) {
-                            Icon(Icons.Filled.ArrowBack, "back")
-                            Text("  Back", style = MaterialTheme.typography.bodyLarge)
-                        }
+                      val intentHome = Intent(this@manageTerrarium, MainActivity::class.java)
+                      Row() {
+                          IconButton(onClick = {
+                              startActivity(intentHome)
+                          }) {
+                              Icon(Icons.Filled.Home, "home")
+                          }
+                          Button(onClick = {
+                              finish()
+                          }) {
+                              Icon(Icons.Filled.ArrowBack, "back")
+                              Text("  Back", style = MaterialTheme.typography.bodyLarge)
+                          }
+                      }
+
+
+
+                      ManageTerrariumScreen("1")
+
                     }
-
-
-
-                    ManageTerrariumScreen("1")
-
-                }
                 }
             }
         }

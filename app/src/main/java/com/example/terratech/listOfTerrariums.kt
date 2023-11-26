@@ -28,21 +28,7 @@ class listOfTerrariums : ComponentActivity() {
         setContent {
             TerraTechTheme {
                 val intent = Intent(this@listOfTerrariums, overviewOfTerrarium::class.java)
-                val intentHome = Intent(this@listOfTerrariums, MainActivity::class.java)
                 Column() {
-                    Row() {
-                        IconButton(onClick = {
-                            startActivity(intentHome)
-                        }) {
-                            Icon(Icons.Filled.Home, "home")
-                        }
-                        Button(onClick = {
-                            finish()
-                        }) {
-                            Icon(Icons.Filled.ArrowBack, "back")
-                            Text("  Back", style = MaterialTheme.typography.bodyLarge)
-                        }
-                    }
                     Button(onClick = {
                         startActivity(intent)
                     }) {

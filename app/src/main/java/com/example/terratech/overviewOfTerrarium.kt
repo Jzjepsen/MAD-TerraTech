@@ -183,7 +183,7 @@ class overviewOfTerrarium : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             TerraTechTheme {
-                val intentHome = Intent(this@overviewOfTerrarium, MainActivity::class.java)
+                val intentHome = Intent(this@overviewOfTerrarium, listOfTerrariums::class.java)
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
