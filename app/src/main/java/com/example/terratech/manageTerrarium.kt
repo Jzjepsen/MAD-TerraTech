@@ -49,7 +49,7 @@ class manageTerrarium : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             TerraTechTheme {
-                val intentHome = Intent(this@manageTerrarium, MainActivity::class.java)
+                val intentHome = Intent(this@manageTerrarium, listOfTerrariums::class.java)
                 val title = "Manage " + intent.getStringExtra("name")
 
                 Surface(
