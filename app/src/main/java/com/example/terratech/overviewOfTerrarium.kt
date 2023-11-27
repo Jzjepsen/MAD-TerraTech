@@ -115,11 +115,11 @@ fun DisplayData(degrees: String, humidity: String) {
 
 // Main screen Composable function
 @Composable
-fun TerrariumDetailsScreen(viewModel: TerrariumViewModel, onManageTerrariumClicked : () -> Unit, onGoogleMapClicked : () -> Unit ) {
+fun TerrariumDetailsScreen(title: String, viewModel: TerrariumViewModel, onManageTerrariumClicked : () -> Unit, onGoogleMapClicked : () -> Unit ) {
     val terrariumData by viewModel.terrariumData.collectAsState()
 
     Column {
-        PageHeader(title = "Terrarium Overview")
+        PageHeader(title = title)
         Row(verticalAlignment = Alignment.CenterVertically) {
             Spacer(Modifier.width(15.dp))
 
@@ -184,6 +184,8 @@ class overviewOfTerrarium : ComponentActivity() {
         setContent {
             TerraTechTheme {
                 val intentHome = Intent(this@overviewOfTerrarium, listOfTerrariums::class.java)
+                val number = intent.getStringExtra("number")
+
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
@@ -204,8 +206,9 @@ class overviewOfTerrarium : ComponentActivity() {
                         }
                         val viewModel: TerrariumViewModel = viewModel()
                         TerrariumDetailsScreen(
+                            "Terrarium $number Overview",
                             viewModel,
-                            onManageTerrariumClicked = { navigateToManageTerrarium() },
+                            onManageTerrariumClicked = { navigateToManageTerrarium("Terrarium $number")},
                             onGoogleMapClicked = { navigateToGoogleMap() }
                         )
                     }
@@ -214,8 +217,9 @@ class overviewOfTerrarium : ComponentActivity() {
         }
     }
 
-    private fun navigateToManageTerrarium() {
+    private fun navigateToManageTerrarium(name: String) {
         val intent = Intent(this, manageTerrarium::class.java)
+        intent.putExtra("name", name)
         startActivity(intent)
     }
 

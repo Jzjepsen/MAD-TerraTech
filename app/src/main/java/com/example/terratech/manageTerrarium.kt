@@ -49,15 +49,14 @@ class manageTerrarium : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             TerraTechTheme {
-
+                val intentHome = Intent(this@manageTerrarium, MainActivity::class.java)
+                val title = "Manage " + intent.getStringExtra("name")
 
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
                     Column {
-
-                      val intentHome = Intent(this@manageTerrarium, MainActivity::class.java)
                       Row() {
                           IconButton(onClick = {
                               startActivity(intentHome)
@@ -72,9 +71,7 @@ class manageTerrarium : ComponentActivity() {
                           }
                       }
 
-
-
-                      ManageTerrariumScreen("1")
+                      ManageTerrariumScreen(title)
 
                     }
                 }
@@ -84,14 +81,14 @@ class manageTerrarium : ComponentActivity() {
 }
 
 @Composable
-fun ManageTerrariumScreen(number: String, modifier: Modifier = Modifier) {
+fun ManageTerrariumScreen(title: String, modifier: Modifier = Modifier) {
 
     TerraTechTheme {
 
             Box (
                 contentAlignment = Alignment.TopCenter
             ) {
-                TitleText("1")
+                TitleText(title)
             }
 
             Box(
@@ -118,10 +115,10 @@ fun ManageTerrariumScreen(number: String, modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun TitleText(TerrariumNumber: String){
+fun TitleText(terrariumTitle: String){
     Text(
         modifier = Modifier.fillMaxWidth().padding(vertical = 20.dp),
-        text = "Manage Terrarium $TerrariumNumber",
+        text = terrariumTitle,
         style = MaterialTheme.typography.headlineMedium,
         textAlign = TextAlign.Center
     )
