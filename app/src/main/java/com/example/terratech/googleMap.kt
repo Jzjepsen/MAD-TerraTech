@@ -3,9 +3,22 @@ package com.example.terratech
 import android.Manifest
 import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.Button
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -53,6 +66,22 @@ class googleMap : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
         setContent {
+            TerraTechTheme {
+                val intentHome = Intent(this@googleMap, listOfTerrariums::class.java)
+                Row() {
+                    IconButton(onClick = {
+                        startActivity(intentHome)
+                    }) {
+                        Icon(Icons.Filled.Home, "home")
+                    }
+                    Button(onClick = {
+                        finish()
+                    }) {
+                        Icon(Icons.Filled.ArrowBack, "back")
+                        Text("  Back", style = MaterialTheme.typography.bodyLarge)
+                    }
+                }
+            }
             MapViewContainer()
         }
     }
