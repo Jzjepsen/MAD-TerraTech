@@ -2,6 +2,7 @@ package com.example.terratech
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
@@ -23,45 +24,102 @@ import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.terratech.ui.theme.TerraTechTheme
-import kotlinx.coroutines.flow.MutableStateFlow
-import androidx.compose.ui.unit.dp
-import androidx.compose.runtime.getValue
-import androidx.compose.material3.Icon
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.terratech.ui.theme.TerraTechTheme
+import retrofit2.http.Query
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.http.GET
+import retrofit2.http.Header
+import retrofit2.http.Path
+import retrofit2.Response
+import kotlinx.coroutines.flow.MutableStateFlow
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import kotlinx.coroutines.launch
+import java.time.LocalDateTime
+import java.time.ZoneOffset
 
 
-// ViewModel to handle the logic and data for the terrarium
-class TerrariumViewModel : ViewModel() {
+// Retrofit setup
+val retrofit: Retrofit = Retrofit.Builder()
+    .baseUrl("https://the-weather-api.p.rapidapi.com/")
+    .addConverterFactory(GsonConverterFactory.create())
+    .build()
+
+// Service interface for the API
+interface RapidApiWeatherService {
+    @GET("api/weather/{city}")
+    suspend fun getWeatherData(
+        @Path("city") city: String,
+        @Header("X-RapidAPI-Key") apiKey: String,
+        @Header("X-RapidAPI-Host") apiHost: String
+    ): Response<ApiResponse>
+}
+
+
+// Data classes to match the JSON structure of the weather API response
+data class ApiResponse(val success: Boolean, val data: WeatherData)
+data class WeatherData(
+    val city: String,
+    val current_weather: String,
+    val temp: String,  // Assuming the temperature is a string
+    val humidity: String  // Assuming the humidity is a string
+)
+
+// Data class for the terrarium data
+data class TerrariumData(val temperature: Double, val humidity: Int)
+
+
+// ViewModel to handle the logic and data processing
+class TerrariumViewModel(private val service: RapidApiWeatherService) : ViewModel() {
     val terrariumData = MutableStateFlow(TerrariumData(0.0, 0))
 
     init {
         fetchTerrariumData()
     }
+
     fun refreshData() {
         fetchTerrariumData() // Your existing function to fetch data
     }
     private fun fetchTerrariumData() {
-        // Fetch data from your API and update the terrariumData
+        viewModelScope.launch {
+            try {
+                val response = service.getWeatherData(
+                    city = "Aarhus",
+                    apiKey = "6a9536a830mshab690651889ce61p13b836jsn0feb8bd8a9d0",
+                    apiHost = "the-weather-api.p.rapidapi.com"
+                )
+
+                if (response.isSuccessful && response.body() != null) {
+                    val weatherData = response.body()!!.data
+                    val temperature = weatherData.temp.toDoubleOrNull() ?: 0.0 // Convert string to Double
+                    val humidity = weatherData.humidity.filter { it.isDigit() }.toIntOrNull() ?: 0 // Extract numeric value
+
+                    terrariumData.value = TerrariumData(temperature, humidity)
+                }
+            } catch (e: Exception) {
+                Log.e("TerrariumViewModel", "Error fetching data: ${e.message}", e)
+            }
+        }
     }
 }
 
-// Data class to represent the terrarium data
-data class TerrariumData(val temperature: Double, val humidity: Int)
 
 // Composable function to display the header
 @Composable
@@ -86,7 +144,10 @@ fun DisplayData(degrees: String, humidity: String) {
     Box(
         modifier = Modifier
             .padding(8.dp)
-            .background(Color.LightGray, shape = RoundedCornerShape(8.dp)) // Customize the box appearance
+            .background(
+                Color.LightGray,
+                shape = RoundedCornerShape(8.dp)
+            ) // Customize the box appearance
             .padding(16.dp) // Padding inside the box
     ) {
         Column {
@@ -108,11 +169,24 @@ fun DisplayData(degrees: String, humidity: String) {
     }
 }
 
+class TerrariumViewModelFactory(private val service: RapidApiWeatherService) : ViewModelProvider.Factory {
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+        if (modelClass.isAssignableFrom(TerrariumViewModel::class.java)) {
+            @Suppress("UNCHECKED_CAST")
+            return TerrariumViewModel(service) as T
+        }
+        throw IllegalArgumentException("Unknown ViewModel class")
+    }
+}
 
 
 // Main screen Composable function
 @Composable
-fun TerrariumDetailsScreen(viewModel: TerrariumViewModel, onManageTerrariumClicked : () -> Unit, onGoogleMapClicked : () -> Unit ) {
+fun TerrariumDetailsScreen(
+    viewModel: TerrariumViewModel,
+    onManageTerrariumClicked: () -> Unit,
+    onGoogleMapClicked: () -> Unit
+) {
     val terrariumData by viewModel.terrariumData.collectAsState()
 
     Column {
@@ -174,17 +248,25 @@ fun TerrariumDetailsScreen(viewModel: TerrariumViewModel, onManageTerrariumClick
     }
 }
 
-
 class overviewOfTerrarium : ComponentActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        val retrofit: Retrofit = Retrofit.Builder()
+            .baseUrl("https://the-weather-api.p.rapidapi.com/")
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+        val service = retrofit.create(RapidApiWeatherService::class.java)
+        val viewModelFactory = TerrariumViewModelFactory(service)
+
         setContent {
             TerraTechTheme {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    val viewModel: TerrariumViewModel = viewModel()
+                    val viewModel: TerrariumViewModel = viewModel(factory = viewModelFactory)
                     TerrariumDetailsScreen(
                         viewModel,
                         onManageTerrariumClicked = { navigateToManageTerrarium() },
@@ -194,6 +276,7 @@ class overviewOfTerrarium : ComponentActivity() {
             }
         }
     }
+
 
     private fun navigateToManageTerrarium() {
         val intent = Intent(this, manageTerrarium::class.java)
