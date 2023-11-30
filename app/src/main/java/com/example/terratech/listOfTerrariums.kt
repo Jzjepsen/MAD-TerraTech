@@ -66,14 +66,16 @@ fun MyApp(content: @Composable () -> Unit) {
         Column() {
             Title(title = "TerraTech")
 
-            Spacer(Modifier.width(15.dp))
+            Spacer(Modifier.height(10.dp))
 
             Text(
-                text = "Below is your list of Terrariums:",
+                text = "Welcome to TerraTech, your smart terrarium assistant. ",
                 style = MaterialTheme.typography.headlineSmall
             )
-
-            Spacer(Modifier.width(40.dp))
+            Text(
+                text = "Click on a terrarium to view its data!",
+                style = MaterialTheme.typography.headlineSmall
+            )
 
             content()
         }
@@ -105,6 +107,8 @@ fun TerrariumList(context: Context) {
             .padding(8.dp)
     ) {
         // Terrarium 1 Button
+        Spacer(Modifier.height(15.dp))
+
         Button(
             onClick = {
                 val intent = Intent(context, overviewOfTerrarium::class.java)
@@ -112,14 +116,15 @@ fun TerrariumList(context: Context) {
                 context.startActivity(intent)
             },
             modifier = Modifier
-                .weight(1f)
+                .fillMaxWidth() // Make the button fill the available width
                 .height(50.dp),
             shape = RoundedCornerShape(12.dp),
-            colors = ButtonDefaults.outlinedButtonColors(contentColor = Color.Blue),
             contentPadding = PaddingValues(horizontal = 16.dp, vertical = 10.dp)
         ) {
-            Text("Terrarium 1", fontSize = 18.sp, color = Color.Blue)
+            Text("Terrarium 1", fontSize = 24.sp, color = Color.White)
         }
+
+        Spacer(Modifier.height(8.dp))
 
         // Terrarium 2 Button
         Button(
@@ -129,14 +134,15 @@ fun TerrariumList(context: Context) {
                 context.startActivity(intent)
             },
             modifier = Modifier
-                .weight(1f)
+                .fillMaxWidth() // Make the button fill the available width
                 .height(50.dp),
             shape = RoundedCornerShape(12.dp),
-            colors = ButtonDefaults.outlinedButtonColors(contentColor = Color.Blue),
             contentPadding = PaddingValues(horizontal = 16.dp, vertical = 10.dp)
         ) {
-            Text("Terrarium 2", fontSize = 18.sp, color = Color.Blue)
+            Text("Terrarium 2", fontSize = 24.sp, color = Color.White)
         }
+
+        Spacer(Modifier.height(8.dp))
 
         // Terrarium 3 Button
         Button(
@@ -146,14 +152,15 @@ fun TerrariumList(context: Context) {
                 context.startActivity(intent)
             },
             modifier = Modifier
-                .weight(1f)
+                .fillMaxWidth() // Make the button fill the available width
                 .height(50.dp),
             shape = RoundedCornerShape(12.dp),
-            colors = ButtonDefaults.outlinedButtonColors(contentColor = Color.Blue),
             contentPadding = PaddingValues(horizontal = 16.dp, vertical = 10.dp)
         ) {
-            Text("Terrarium 3", fontSize = 18.sp, color = Color.Blue)
+            Text("Terrarium 3", fontSize = 24.sp, color = Color.White)
         }
+
+        Spacer(Modifier.height(8.dp))
 
         // Terrarium 4 Button
         Button(
@@ -163,13 +170,12 @@ fun TerrariumList(context: Context) {
                 context.startActivity(intent)
             },
             modifier = Modifier
-                .weight(1f)
+                .fillMaxWidth() // Make the button fill the available width
                 .height(50.dp),
             shape = RoundedCornerShape(12.dp),
-            colors = ButtonDefaults.outlinedButtonColors(contentColor = Color.Blue),
             contentPadding = PaddingValues(horizontal = 16.dp, vertical = 10.dp)
         ) {
-            Text("Terrarium 4", fontSize = 18.sp, color = Color.Blue)
+            Text("Terrarium 4", fontSize = 24.sp, color = Color.White)
         }
     }
 }
