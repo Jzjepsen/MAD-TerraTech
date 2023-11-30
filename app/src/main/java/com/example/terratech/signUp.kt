@@ -173,7 +173,8 @@ fun SignUp(modifier: Modifier = Modifier, service: Firestore){
         }
 
         TextButton(onClick = {
-            // Go back
+            val intent = Intent(context, login::class.java)
+            context.startActivity(intent)
         }
         ) {
             Text(text = "Go back", fontSize = 16.sp)
