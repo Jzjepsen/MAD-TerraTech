@@ -19,6 +19,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material3.IconButton
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.LocationOn
@@ -266,6 +267,7 @@ class overviewOfTerrarium : ComponentActivity() {
             TerraTechTheme {
                 val intentHome = Intent(this@overviewOfTerrarium, listOfTerrariums::class.java)
                 val number = intent.getStringExtra("number")
+                val name = "Terrarium $number"
 
                 Surface(
                     modifier = Modifier.fillMaxSize(),
@@ -287,8 +289,9 @@ class overviewOfTerrarium : ComponentActivity() {
                         }
                         val viewModel: TerrariumViewModel = viewModel(factory = viewModelFactory)
                         TerrariumDetailsScreen(
+                            name,
                             viewModel,
-                            onManageTerrariumClicked = { navigateToManageTerrarium() },
+                            onManageTerrariumClicked = { navigateToManageTerrarium(name) },
                             onGoogleMapClicked = { navigateToGoogleMap() }
                         )
                     }

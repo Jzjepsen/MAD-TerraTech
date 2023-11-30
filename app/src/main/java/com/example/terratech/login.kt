@@ -127,7 +127,7 @@ fun SignIn(modifier: Modifier = Modifier, service: Firestore){
                     if (loginErrorMessage.value != null) {
                         loginErrorMessage.value = null // Reset error message when user starts typing
                     } },
-            label = { Text("Username") },
+            label = { Text("Email") },
             leadingIcon = { Icon(imageVector = Icons.Default.Email, contentDescription = "Email")}
 
         )
