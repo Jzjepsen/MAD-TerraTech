@@ -19,6 +19,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.Settings
@@ -182,7 +184,7 @@ class TerrariumViewModelFactory(private val service: RapidApiWeatherService) : V
 
 // Main screen Composable function
 @Composable
-fun TerrariumDetailsScreen(
+fun TerrariumDetailsScreen(title: String,
     viewModel: TerrariumViewModel,
     onManageTerrariumClicked: () -> Unit,
     onGoogleMapClicked: () -> Unit
@@ -190,7 +192,7 @@ fun TerrariumDetailsScreen(
     val terrariumData by viewModel.terrariumData.collectAsState()
 
     Column {
-        PageHeader(title = "Terrarium Overview")
+        PageHeader(title = title)
         Row(verticalAlignment = Alignment.CenterVertically) {
             Spacer(Modifier.width(15.dp))
 
@@ -262,24 +264,42 @@ class overviewOfTerrarium : ComponentActivity() {
 
         setContent {
             TerraTechTheme {
+                val intentHome = Intent(this@overviewOfTerrarium, listOfTerrariums::class.java)
+                val number = intent.getStringExtra("number")
+
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    val viewModel: TerrariumViewModel = viewModel(factory = viewModelFactory)
-                    TerrariumDetailsScreen(
-                        viewModel,
-                        onManageTerrariumClicked = { navigateToManageTerrarium() },
-                        onGoogleMapClicked = { navigateToGoogleMap() }
-                    )
+                    Column() {
+                        Row() {
+                            IconButton(onClick = {
+                                startActivity(intentHome)
+                            }) {
+                                Icon(Icons.Filled.Home, "home")
+                            }
+                            Button(onClick = {
+                                finish()
+                            }) {
+                                Icon(Icons.Filled.ArrowBack, "back")
+                                Text("  Back", style = MaterialTheme.typography.bodyLarge)
+                            }
+                        }
+                        val viewModel: TerrariumViewModel = viewModel(factory = viewModelFactory)
+                        TerrariumDetailsScreen(
+                            viewModel,
+                            onManageTerrariumClicked = { navigateToManageTerrarium() },
+                            onGoogleMapClicked = { navigateToGoogleMap() }
+                        )
+                    }
                 }
             }
         }
     }
 
-
-    private fun navigateToManageTerrarium() {
+    private fun navigateToManageTerrarium(name: String) {
         val intent = Intent(this, manageTerrarium::class.java)
+        intent.putExtra("name", name)
         startActivity(intent)
     }
 

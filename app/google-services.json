@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1037069905178",
+    "project_id": "terratech-7df3a",
+    "storage_bucket": "terratech-7df3a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1037069905178:android:337a21b7eadfc1b29a50a3",
+        "android_client_info": {
+          "package_name": "com.example.terratech"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAyyaamPe5vK3GEGpTjltSSCFpZCRVT5ck"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
