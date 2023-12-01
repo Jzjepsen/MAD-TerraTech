@@ -66,32 +66,11 @@ class googleMap : AppCompatActivity() {
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
         mapView = MapView(this)
         mapView.onCreate(savedInstanceState)
+
         setContent {
             TerraTechTheme {
-                val intentHome = Intent(this@googleMap, listOfTerrariums::class.java)
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
-                ) {
-                    Column() {
-                        Row() {
-                            IconButton(onClick = {
-                                startActivity(intentHome)
-                            }) {
-                                Icon(Icons.Filled.Home, "home")
-                            }
-                            Button(onClick = {
-                                finish()
-                            }) {
-                                Icon(Icons.Filled.ArrowBack, "back")
-                                Text("  Back", style = MaterialTheme.typography.bodyLarge)
-                            }
-                        }
-                        MapViewContainer()
-                    }
-                }
+                MapScreen()
             }
-            MapScreen()
         }
     }
 
@@ -124,12 +103,19 @@ class googleMap : AppCompatActivity() {
         Scaffold(
             topBar = { MyTopBar(context) }
         ) { paddingValues ->
-            MapViewContainer(mapView, paddingValues)
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(paddingValues)
+            ) {
+                MapViewContainer(paddingValues)
+            }
         }
     }
 
+
     @Composable
-    fun MapViewContainer(mapView: MapView, paddingValues: PaddingValues) {
+    fun MapViewContainer(paddingValues: PaddingValues) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
