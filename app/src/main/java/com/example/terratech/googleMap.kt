@@ -61,7 +61,28 @@ class googleMap : AppCompatActivity() {
 
         setContent {
             TerraTechTheme {
-                MapScreen() // This should be the only call in setContent
+                val intentHome = Intent(this@googleMap, listOfTerrariums::class.java)
+                Surface(
+                    modifier = Modifier.fillMaxSize(),
+                    color = MaterialTheme.colorScheme.background
+                ) {
+                    Column() {
+                        Row() {
+                            IconButton(onClick = {
+                                startActivity(intentHome)
+                            }) {
+                                Icon(Icons.Filled.Home, "home")
+                            }
+                            Button(onClick = {
+                                finish()
+                            }) {
+                                Icon(Icons.Filled.ArrowBack, "back")
+                                Text("  Back", style = MaterialTheme.typography.bodyLarge)
+                            }
+                        }
+                        MapScreen()
+                    }
+                }
             }
         }
     }
