@@ -10,10 +10,7 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.Button
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Home
@@ -61,31 +58,11 @@ class googleMap : AppCompatActivity() {
 
         setContent {
             TerraTechTheme {
-                val intentHome = Intent(this@googleMap, listOfTerrariums::class.java)
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
-                ) {
-                    Column() {
-                        Row() {
-                            IconButton(onClick = {
-                                startActivity(intentHome)
-                            }) {
-                                Icon(Icons.Filled.Home, "home")
-                            }
-                            Button(onClick = {
-                                finish()
-                            }) {
-                                Icon(Icons.Filled.ArrowBack, "back")
-                                Text("  Back", style = MaterialTheme.typography.bodyLarge)
-                            }
-                        }
+
                         MapScreen()
                     }
                 }
             }
-        }
-    }
 
     @Composable
     fun MyTopBar(context: Context) {
@@ -121,19 +98,6 @@ class googleMap : AppCompatActivity() {
                     .fillMaxSize()
                     .padding(paddingValues)
             ) {
-                Row() {
-                    IconButton(onClick = {
-                        context.startActivity(Intent(context, listOfTerrariums::class.java))
-                    }) {
-                        Icon(Icons.Filled.Home, "home")
-                    }
-                    Button(onClick = {
-                        (context as? Activity)?.finish()
-                    }) {
-                        Icon(Icons.Filled.ArrowBack, "back")
-                        Text("  Back", style = MaterialTheme.typography.bodyLarge)
-                    }
-                }
                 MapViewContainer(paddingValues)
             }
         }
