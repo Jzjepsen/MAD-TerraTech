@@ -44,40 +44,40 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.terratech.ui.theme.TerraTechTheme
-import retrofit2.http.Query
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
-import retrofit2.http.Header
 import retrofit2.http.Path
 import retrofit2.Response
 import kotlinx.coroutines.flow.MutableStateFlow
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import kotlinx.coroutines.launch
-import java.time.LocalDateTime
-import java.time.ZoneOffset
+import javax.net.ssl.*
 
 
 // Retrofit setup
 val retrofit: Retrofit = Retrofit.Builder()
-    .baseUrl("https://the-weather-api.p.rapidapi.com/")
+    .baseUrl("http://10.0.2.2:3100/")
     .addConverterFactory(GsonConverterFactory.create())
     .build()
 
 // Service interface for the API
-interface RapidApiWeatherService {
-    @GET("api/weather/{city}")
-    suspend fun getWeatherData(
-        @Path("city") city: String,
-        @Header("X-RapidAPI-Key") apiKey: String,
-        @Header("X-RapidAPI-Host") apiHost: String
-    ): Response<ApiResponse>
+interface LocalWeatherService {
+    @GET("/")
+    suspend fun getWeatherData(): Response<ApiResponse>
 }
 
 
+
 // Data classes to match the JSON structure of the weather API response
-data class ApiResponse(val success: Boolean, val data: WeatherData)
+data class ApiResponse(
+    val _id: String,
+    val deviceId: String,
+    val timestamp: String,
+    val temperature: Double,
+    val humidity: Int
+)
 data class WeatherData(
     val city: String,
     val current_weather: String,
@@ -86,41 +86,45 @@ data class WeatherData(
 )
 
 // Data class for the terrarium data
-data class TerrariumData(val temperature: Double, val humidity: Int)
+data class TerrariumData(val temperature: Int, val humidity: Int)
 
 
 // ViewModel to handle the logic and data processing
-class TerrariumViewModel(private val service: RapidApiWeatherService) : ViewModel() {
-    val terrariumData = MutableStateFlow(TerrariumData(0.0, 0))
+class TerrariumViewModel(private val service: LocalWeatherService) : ViewModel() {
+    val terrariumData = MutableStateFlow(TerrariumData(0, 0))
 
     init {
         fetchTerrariumData()
     }
 
     fun refreshData() {
-        fetchTerrariumData() // Your existing function to fetch data
+
+        fetchTerrariumData()
+
     }
+
     private fun fetchTerrariumData() {
+        Log.d("test", "we are here")
         viewModelScope.launch {
             try {
-                val response = service.getWeatherData(
-                    city = "Aarhus",
-                    apiKey = "6a9536a830mshab690651889ce61p13b836jsn0feb8bd8a9d0",
-                    apiHost = "the-weather-api.p.rapidapi.com"
-                )
+                val response = service.getWeatherData()
+                Log.d("test", "Response code: ${response.code()}")
+                Log.d("test", "Response body: ${response.body()}")
 
                 if (response.isSuccessful && response.body() != null) {
-                    val weatherData = response.body()!!.data
-                    val temperature = weatherData.temp.toDoubleOrNull() ?: 0.0 // Convert string to Double
-                    val humidity = weatherData.humidity.filter { it.isDigit() }.toIntOrNull() ?: 0 // Extract numeric value
+                    val weatherData = response.body()!!
+                    val temperature = weatherData.temperature.toInt()
+                    val humidity = weatherData.humidity.toInt()
 
                     terrariumData.value = TerrariumData(temperature, humidity)
+                    Log.d("test", "data: $temperature")
                 }
             } catch (e: Exception) {
                 Log.e("TerrariumViewModel", "Error fetching data: ${e.message}", e)
             }
         }
     }
+
 }
 
 
@@ -172,7 +176,7 @@ fun DisplayData(degrees: String, humidity: String) {
     }
 }
 
-class TerrariumViewModelFactory(private val service: RapidApiWeatherService) : ViewModelProvider.Factory {
+class TerrariumViewModelFactory(private val service: LocalWeatherService) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(TerrariumViewModel::class.java)) {
             @Suppress("UNCHECKED_CAST")
@@ -257,10 +261,10 @@ class overviewOfTerrarium : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         val retrofit: Retrofit = Retrofit.Builder()
-            .baseUrl("https://the-weather-api.p.rapidapi.com/")
+            .baseUrl("http://10.0.2.2:3100/")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
-        val service = retrofit.create(RapidApiWeatherService::class.java)
+        val service = retrofit.create(LocalWeatherService::class.java)
         val viewModelFactory = TerrariumViewModelFactory(service)
 
         setContent {
