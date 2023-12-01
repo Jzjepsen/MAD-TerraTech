@@ -51,14 +51,34 @@ class googleMap : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
-        mapView = MapView(this)
-        mapView.onCreate(savedInstanceState)
-        SetContent {
-          TerraTechTheme{
-            MapScreen()
-          }
-        }
+        setContent {
+            TerraTechTheme {
+                val intentHome = Intent(this@googleMap, listOfTerrariums::class.java)
+                Surface(
+                    modifier = Modifier.fillMaxSize(),
+                    color = MaterialTheme.colorScheme.background
+                ) {
+                    Column() {
+                        Row() {
+                            IconButton(onClick = {
+                                startActivity(intentHome)
+                            }) {
+                                Icon(Icons.Filled.Home, "home")
+                            }
+                            Button(onClick = {
+                                finish()
+                            }) {
+                                Icon(Icons.Filled.ArrowBack, "back")
+                                Text("  Back", style = MaterialTheme.typography.bodyLarge)
+                            }
+                        }
+                        MapViewContainer()
+                    }
+                }
+            }
 
+        }
+    }
 
     @Composable
     fun MapViewContainer() {
@@ -82,34 +102,7 @@ class googleMap : AppCompatActivity() {
                     }
                 }
             }
-        )
-    }
-
-    @OptIn(ExperimentalMaterial3Api::class)
-    @Composable
-    fun MapScreen() {
-        val context = LocalContext.current // Getting the context
-        Scaffold(
-            topBar = { MyTopBar(context) }
-        ) { paddingValues ->
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(paddingValues)
-            ) {
-                MapViewContainer(paddingValues)
-            }
         }
-    }
-
-
-    @Composable
-    fun MapViewContainer(paddingValues: PaddingValues) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(paddingValues)
-        ) {
 
         Column {
             // Adding title text at the top of the screen
