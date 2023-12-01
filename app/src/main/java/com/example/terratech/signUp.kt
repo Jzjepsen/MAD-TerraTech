@@ -104,7 +104,7 @@ fun SignUp(modifier: Modifier = Modifier, service: Firestore){
                 if (loginErrorMessage.value != null) {
                     loginErrorMessage.value = null // Reset error message when user starts typing
                 } },
-            label = { Text("Username") },
+            label = { Text("Email") },
             leadingIcon = { Icon(imageVector = Icons.Default.Email, contentDescription = "Email") }
 
         )
@@ -173,7 +173,8 @@ fun SignUp(modifier: Modifier = Modifier, service: Firestore){
         }
 
         TextButton(onClick = {
-            // Go back
+            val intent = Intent(context, login::class.java)
+            context.startActivity(intent)
         }
         ) {
             Text(text = "Go back", fontSize = 16.sp)
