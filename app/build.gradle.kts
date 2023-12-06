@@ -10,7 +10,7 @@ android {
 
     defaultConfig {
         applicationId = "com.example.terratech"
-        minSdk = 24
+        minSdk = 26
         targetSdk = 33
         versionCode = 1
         versionName = "1.0"
@@ -59,8 +59,20 @@ dependencies {
     implementation ("androidx.lifecycle:lifecycle-viewmodel-compose")
     implementation("androidx.compose.ui:ui")
     implementation("androidx.compose.ui:ui-graphics")
+    implementation ("androidx.compose.ui:ui:1.0.2")
+    implementation ("androidx.compose.material:material:1.0.4")
     implementation("androidx.compose.ui:ui-tooling-preview")
     implementation("androidx.compose.material3:material3")
+    implementation ("androidx.compose.material:material")
+    implementation ("androidx.lifecycle:lifecycle-viewmodel-compose")
+    implementation ("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.2")
+    implementation ("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4")
+    implementation ("com.squareup.retrofit2:converter-gson:2.9.0")
+    implementation ("com.google.android.gms:play-services-maps:17.0.1")
+    implementation ("com.google.android.gms:play-services-location:18.0.0")
+    implementation ("androidx.appcompat:appcompat:1.4.1")
+    implementation ("androidx.compose.ui:ui:<latest-version>")
     implementation(platform("androidx.compose:compose-bom:2023.03.00"))
     implementation(platform("androidx.compose:compose-bom:2023.03.00"))
     implementation(platform("androidx.compose:compose-bom:2023.03.00"))

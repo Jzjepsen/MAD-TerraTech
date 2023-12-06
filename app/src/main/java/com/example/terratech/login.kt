@@ -127,7 +127,7 @@ fun SignIn(modifier: Modifier = Modifier, service: Firestore){
                     if (loginErrorMessage.value != null) {
                         loginErrorMessage.value = null // Reset error message when user starts typing
                     } },
-            label = { Text("Username") },
+            label = { Text("Email") },
             leadingIcon = { Icon(imageVector = Icons.Default.Email, contentDescription = "Email")}
 
         )
@@ -152,7 +152,7 @@ fun SignIn(modifier: Modifier = Modifier, service: Firestore){
                 scope.launch {
                         if (isValidEmail(username.value)) {
                             val user = service.login(username.value, password.value)
-                            val intent = Intent(context, overviewOfTerrarium::class.java)
+                            val intent = Intent(context, listOfTerrariums::class.java)
                             context.startActivity(intent)
                         }
                         else {

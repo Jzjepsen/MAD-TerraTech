@@ -12,3 +12,5 @@ local.properties
 *.lock
 *.bin
 *.lock
+.idea/inspectionProfiles/Project_Default.xml
+.gradle/file-system.probe
