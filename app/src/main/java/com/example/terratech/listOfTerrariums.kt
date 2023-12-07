@@ -75,8 +75,8 @@ private fun parseTerrariums(jsonData: String): List<Terrarium> {
         terrariums.add(Terrarium(
             id = jsonObject.getString("id"),
             name = jsonObject.getString("name"),
-            temperature = jsonObject.getString("temperature"),
-            humidity = jsonObject.getString("humidity"),
+            temperature = jsonObject.getInt("temperature"),
+            humidity = jsonObject.getInt("humidity"),
             plants = jsonObject.getJSONArray("plants").let { 0.until(it.length()).map { idx -> it.getString(idx) } }
         ))
     }
@@ -158,8 +158,8 @@ fun TerrariumList(terrariums: List<Terrarium>) {
 fun TerrariumListPreview() {
     // Sample terrarium data for preview
     val sampleTerrariums = listOf(
-        Terrarium("1", "Tropical Paradise", "28°C", "75%", listOf("Fern", "Moss")),
-        Terrarium("2", "Desert Oasis", "34°C", "20%", listOf("Cactus", "Aloe Vera"))
+        Terrarium("1", "Tropical Paradise", 28, 75, listOf("Fern", "Moss")),
+        Terrarium("2", "Desert Oasis", 34, 20, listOf("Cactus", "Aloe Vera"))
         // Add more sample data as needed
     )
     TerrariumList(sampleTerrariums)
