@@ -3,57 +3,87 @@ package com.example.terratech
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.Home
 import androidx.compose.material3.Button
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.example.terratech.ui.theme.TerraTechTheme
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-//import androidx.navigation.NavController
-
-
+import com.example.terratech.data.Terrarium
+import com.google.firebase.firestore.FirebaseFirestore
+import org.json.JSONArray
+import java.io.IOException
 
 
 class listOfTerrariums : ComponentActivity() {
+    private lateinit var db: FirebaseFirestore
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        db = FirebaseFirestore.getInstance()
+        val jsonData = readJSONFromAsset(this, "terrariums.json")
+        val terrariums = parseTerrariums(jsonData)
+        val myContext: Context = this
+        addTerrariumsToFirestore(terrariums)
         setContent {
             TerraTechTheme {
                 MyApp {
-                    TerrariumList(this)
+                    TerrariumList(terrariums)
                 }
             }
         }
     }
+    private fun addTerrariumsToFirestore(terrariums: List<Terrarium>) {
+        terrariums.forEach { terrarium ->
+            db.collection("terrariums").document(terrarium.id)
+                .set(terrarium)
+                .addOnSuccessListener { Log.d("Firestore", "Terrarium successfully written!") }
+                .addOnFailureListener { e -> Log.w("Firestore", "Error writing terrarium", e) }
+        }
+    }
 }
+private fun readJSONFromAsset(context: Context, filename: String): String {
+    return try {
+        context.assets.open(filename).bufferedReader().use { it.readText() }
+    } catch (ex: IOException) {
+        ex.printStackTrace()
+        ""
+    }
+}
+
+private fun parseTerrariums(jsonData: String): List<Terrarium> {
+    val jsonArray = JSONArray(jsonData)
+    val terrariums = mutableListOf<Terrarium>()
+    for (i in 0 until jsonArray.length()) {
+        val jsonObject = jsonArray.getJSONObject(i)
+        terrariums.add(Terrarium(
+            id = jsonObject.getString("id"),
+            name = jsonObject.getString("name"),
+            temperature = jsonObject.getString("temperature"),
+            humidity = jsonObject.getString("humidity"),
+            plants = jsonObject.getJSONArray("plants").let { 0.until(it.length()).map { idx -> it.getString(idx) } }
+        ))
+    }
+    return terrariums
+}
+
+
 
 @Composable
 fun MyApp(content: @Composable () -> Unit) {
@@ -100,82 +130,25 @@ fun Title(title: String) {
 }
 
 @Composable
-fun TerrariumList(context: Context) {
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(8.dp)
-    ) {
-        // Terrarium 1 Button
-        Spacer(Modifier.height(15.dp))
+fun TerrariumList(terrariums: List<Terrarium>) {
+    // Retrieve the current context
+    val currentContext = LocalContext.current
 
-        Button(
-            onClick = {
-                val intent = Intent(context, overviewOfTerrarium::class.java)
-                intent.putExtra("number", "1")
-                context.startActivity(intent)
-            },
-            modifier = Modifier
-                .fillMaxWidth() // Make the button fill the available width
-                .height(50.dp),
-            shape = RoundedCornerShape(12.dp),
-            contentPadding = PaddingValues(horizontal = 16.dp, vertical = 10.dp)
-        ) {
-            Text("Terrarium 1", fontSize = 24.sp, color = Color.White)
-        }
-
-        Spacer(Modifier.height(8.dp))
-
-        // Terrarium 2 Button
-        Button(
-            onClick = {
-                val intent = Intent(context, overviewOfTerrarium::class.java)
-                intent.putExtra("number", "2")
-                context.startActivity(intent)
-            },
-            modifier = Modifier
-                .fillMaxWidth() // Make the button fill the available width
-                .height(50.dp),
-            shape = RoundedCornerShape(12.dp),
-            contentPadding = PaddingValues(horizontal = 16.dp, vertical = 10.dp)
-        ) {
-            Text("Terrarium 2", fontSize = 24.sp, color = Color.White)
-        }
-
-        Spacer(Modifier.height(8.dp))
-
-        // Terrarium 3 Button
-        Button(
-            onClick = {
-                val intent = Intent(context, overviewOfTerrarium::class.java)
-                intent.putExtra("number", "3")
-                context.startActivity(intent)
-            },
-            modifier = Modifier
-                .fillMaxWidth() // Make the button fill the available width
-                .height(50.dp),
-            shape = RoundedCornerShape(12.dp),
-            contentPadding = PaddingValues(horizontal = 16.dp, vertical = 10.dp)
-        ) {
-            Text("Terrarium 3", fontSize = 24.sp, color = Color.White)
-        }
-
-        Spacer(Modifier.height(8.dp))
-
-        // Terrarium 4 Button
-        Button(
-            onClick = {
-                val intent = Intent(context, overviewOfTerrarium::class.java)
-                intent.putExtra("number", "4")
-                context.startActivity(intent)
-            },
-            modifier = Modifier
-                .fillMaxWidth() // Make the button fill the available width
-                .height(50.dp),
-            shape = RoundedCornerShape(12.dp),
-            contentPadding = PaddingValues(horizontal = 16.dp, vertical = 10.dp)
-        ) {
-            Text("Terrarium 4", fontSize = 24.sp, color = Color.White)
+    Column(modifier = Modifier.fillMaxWidth().padding(8.dp)) {
+        terrariums.forEach { terrarium ->
+            Button(
+                onClick = {
+                    val intent = Intent(currentContext, overviewOfTerrarium::class.java)
+                    intent.putExtra("name", terrarium.name)
+                    currentContext.startActivity(intent)
+                },
+                modifier = Modifier.fillMaxWidth().height(50.dp),
+                shape = RoundedCornerShape(12.dp),
+                contentPadding = PaddingValues(horizontal = 16.dp, vertical = 10.dp)
+            ) {
+                Text(terrarium.name, fontSize = 24.sp, color = Color.White)
+            }
+            Spacer(Modifier.height(8.dp))
         }
     }
 }
@@ -183,5 +156,11 @@ fun TerrariumList(context: Context) {
 @Preview(showBackground = true)
 @Composable
 fun TerrariumListPreview() {
-    TerrariumList(context = LocalContext.current)
+    // Sample terrarium data for preview
+    val sampleTerrariums = listOf(
+        Terrarium("1", "Tropical Paradise", "28°C", "75%", listOf("Fern", "Moss")),
+        Terrarium("2", "Desert Oasis", "34°C", "20%", listOf("Cactus", "Aloe Vera"))
+        // Add more sample data as needed
+    )
+    TerrariumList(sampleTerrariums)
 }
