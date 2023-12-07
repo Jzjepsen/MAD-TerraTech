@@ -98,14 +98,18 @@ class TerrariumViewModel(private val service: RapidApiWeatherService) : ViewMode
     }
 
     fun refreshData() {
+        Log.d("TerrariumViewModel", "refreshData() called") // Add this log
+
         fetchTerrariumData() // Your existing function to fetch data
     }
     private fun fetchTerrariumData() {
+        Log.d("TerrariumViewModel", "fetchTerrariumData() called") // Add this log
+
         viewModelScope.launch {
             try {
                 val response = service.getWeatherData(
                     city = "Aarhus",
-                    apiKey = "6a9536a830mshab690651889ce61p13b836jsn0feb8bd8a9d0",
+                    apiKey = "aba806aaf8msh7f7b15cc8ea173ap1c6d35jsn0200c4ca545f",
                     apiHost = "the-weather-api.p.rapidapi.com"
                 )
 
@@ -115,6 +119,8 @@ class TerrariumViewModel(private val service: RapidApiWeatherService) : ViewMode
                     val humidity = weatherData.humidity.filter { it.isDigit() }.toIntOrNull() ?: 0 // Extract numeric value
 
                     terrariumData.value = TerrariumData(temperature, humidity)
+                    Log.d("TerrariumViewModel", "Temperature: $temperature, Humidity: $humidity")
+
                 }
             } catch (e: Exception) {
                 Log.e("TerrariumViewModel", "Error fetching data: ${e.message}", e)
