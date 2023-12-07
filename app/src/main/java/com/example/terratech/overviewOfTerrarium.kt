@@ -266,8 +266,7 @@ class overviewOfTerrarium : ComponentActivity() {
         setContent {
             TerraTechTheme {
                 val intentHome = Intent(this@overviewOfTerrarium, listOfTerrariums::class.java)
-                val number = intent.getStringExtra("number")
-                val name = "Terrarium $number"
+                val name = intent.getStringExtra("name")
 
                 Surface(
                     modifier = Modifier.fillMaxSize(),
@@ -288,12 +287,14 @@ class overviewOfTerrarium : ComponentActivity() {
                             }
                         }
                         val viewModel: TerrariumViewModel = viewModel(factory = viewModelFactory)
-                        TerrariumDetailsScreen(
-                            name,
-                            viewModel,
-                            onManageTerrariumClicked = { navigateToManageTerrarium(name) },
-                            onGoogleMapClicked = { navigateToGoogleMap() }
-                        )
+                        if (name != null) {
+                            TerrariumDetailsScreen(
+                                name,
+                                viewModel,
+                                onManageTerrariumClicked = { navigateToManageTerrarium(name) },
+                                onGoogleMapClicked = { navigateToGoogleMap() }
+                            )
+                        }
                     }
                 }
             }

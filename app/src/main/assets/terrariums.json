@@ -1,0 +1,47 @@
+[
+  {
+    "id": "1",
+    "name": "Tropical Paradise",
+    "temperature": "28\u00b0C",
+    "humidity": "75%",
+    "plants": [
+      "Fern",
+      "Moss",
+      "Orchid"
+    ]
+
+  },
+  {
+    "id": "2",
+    "name": "Desert Oasis",
+    "temperature": "34\u00b0C",
+    "humidity": "20%",
+    "plants": [
+      "Cactus",
+      "Aloe Vera",
+      "Agave"
+    ]
+  },
+  {
+    "id": "3",
+    "name": "Herb Garden",
+    "temperature": "22\u00b0C",
+    "humidity": "60%",
+    "plants": [
+      "Basil",
+      "Thyme",
+      "Mint"
+    ]
+  },
+  {
+    "id": "4",
+    "name": "Fern Forest",
+    "temperature": "24\u00b0C",
+    "humidity": "80%",
+    "plants": [
+      "Boston Fern",
+      "Staghorn Fern",
+      "Bird's Nest Fern"
+    ]
+  }
+]
