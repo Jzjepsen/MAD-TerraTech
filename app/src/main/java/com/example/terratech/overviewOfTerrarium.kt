@@ -70,7 +70,7 @@ interface LocalWeatherService {
 
 
 
-// Data classes to match the JSON structure of the weather API response
+// Data classes to match the JSON structure of the IoT endpoint
 data class ApiResponse(
     val _id: String,
     val deviceId: String,
